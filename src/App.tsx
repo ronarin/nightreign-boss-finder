@@ -16,23 +16,23 @@ function App() {
 
   const day2Options = useMemo(() => {
     if (!selectedDay1) return [];
-    
+
     // Find all routes that start with selected Day 1 boss
     const validRoutes = routes.filter(r => r.day1Id === selectedDay1);
     const validDay2Ids = new Set(validRoutes.map(r => r.day2Id));
-    
+
     return bosses.filter(b => b.type === 'day2' && validDay2Ids.has(b.id));
   }, [selectedDay1]);
 
   const day3Candidates = useMemo(() => {
     if (!selectedDay1) return [];
-    
+
     let validRoutes = routes.filter(r => r.day1Id === selectedDay1);
-    
+
     if (selectedDay2) {
       validRoutes = validRoutes.filter(r => r.day2Id === selectedDay2);
     }
-    
+
     const validDay3Ids = new Set(validRoutes.map(r => r.day3Id));
     return bosses.filter(b => b.type === 'day3' && validDay3Ids.has(b.id));
   }, [selectedDay1, selectedDay2]);
@@ -56,20 +56,22 @@ function App() {
 
   return (
     <Layout>
-      <div className="space-y-8">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <BossSelector
-          stage="Day 1: The Beginning"
+          stage="1日目: 始まりの刻"
           options={day1Options}
           selectedId={selectedDay1}
           onSelect={handleDay1Select}
+          defaultLabel="1日目のボスを選択してください"
         />
 
         {selectedDay1 && (
           <BossSelector
-            stage="Day 2: The Deepening"
+            stage="2日目: 深まる闇"
             options={day2Options}
             selectedId={selectedDay2}
             onSelect={handleDay2Select}
+            defaultLabel="2日目のボスを選択してください"
           />
         )}
 
@@ -81,12 +83,12 @@ function App() {
         )}
 
         {(selectedDay1 || selectedDay2) && (
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-4">
             <button
               onClick={handleReset}
               className="px-6 py-2 text-sm text-[var(--color-text-muted)] border border-[var(--color-border)] rounded hover:bg-[var(--color-bg-hover)] transition-colors"
             >
-              Reset Selection
+              選択をリセット
             </button>
           </div>
         )}
